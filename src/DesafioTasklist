@@ -1,0 +1,69 @@
+Instruções
+Estrutura, regras e requisitos do projeto
+
+1. Estrutura de cada tarefa
+Cada Tarefa será representada por uma data class chamada Task, contendo as seguintes propriedades:
+
+id: (único para cada tarefa, gerado automaticamente).
+title: (String) - Título da tarefa.
+description: (String?) - Descrição opcional da tarefa.
+isCompleted: (Boolean) - Indica se a tarefa está concluída.
+createdAt: (DateTime) - Data de criação da tarefa.
+
+2. Funcionalidades obrigatórias
+Utilize companion object para gerar IDs únicos automaticamente para cada Task.
+Implemente uma classe TaskManager com métodos para:
+Adicionar uma nova tarefa.
+Listar todas as tarefas (destruturando title e isCompleted). *Buscar uma tarefa por ID. *Atualizar o status (isCompleted) de uma tarefa específica. *Excluir uma tarefa pelo ID. *Filtrar tarefas concluídas ou pendentes usando filter.
+Use funções de validação como require para garantir que o título da tarefa não está vazio e a tarefa existe antes de tentarmos excluir ou atualiza-lá.
+Utilize sealed classes para representar o retorno das operações com os estados de sucesso (com uma mensagem personalizada) e erro (com uma mensagem de erro).
+Adicione funções para converter a task em uma string formatada, e obter a contagem de tarefas diretamente da lista.
+3. Exemplo de saída esperada
+Este é um exemplo da saída esperada que o código deve gerar ao ser executado:
+
+Success(message=Tarefa adicionada com sucesso! ID: 2)
+Success(message=Tarefa adicionada com sucesso! ID: 3)
+
+Tarefas:
+(Comprar pão, false)
+(Estudar Kotlin, false)
+(Fazer exercícios, false)
+Success(message=Status da tarefa ID 1 atualizado para true)
+
+Tarefas concluídas:
+
+4. Desenvolvendo o projeto
+Para desenvolver esse projeto, recomendamos utilizar as principais ferramentas que utilizamos durante a formação até aqui.
+
+Caso você tenha alguma dificuldade você pode ir no nosso
+fórum
+ e deixar sua dúvida por lá!
+
+Após terminar o desafio, caso você queira, você pode tentar dar o próximo passo e deixar a aplicação com a sua cara. Tente adicionar novas funcionalidades para ir além 🚀
+
+5. Entrega
+Lembre-se que o intuito de um desafio é te impulsionar, por isso, dependendo do desafio, pode ser que você precise ir além do que foi discutido em sala de aula. Mas isso não é algo ruim: ter autonomia para buscar informações extras é uma habilidade muito valiosa e vai ser ótimo pra você treinar ela aqui com a gente!
+
+E lembre-se: tenha calma! Enfrentar desafios faz parte do seu processo de aprendizado!
+
+Após concluir o desafio, você deve enviar a URL do seu código no Github.
+
+Além disso, que tal fazer um post no LinkedIn compartilhando o seu aprendizado e contando como foi a experiência?
+
+É uma excelente forma de demonstrar seus conhecimentos e atrair novas oportunidades!
+
+Obs: Se você se sentir à vontade, pode postar um print do resultado final e nos marcar! Vai ser incrível acompanhar a sua evolução! 💜
+
+Feito com 💜 por Rocketseat 👋
+
+
+
+
+
+
+
+
+
+
+
+
