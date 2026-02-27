@@ -60,7 +60,7 @@ class TaskManager: Manager<Task> {
     }
 
     override fun listTask(): List<String>{
-        return formatTask(taskList)
+        return taskList.map { formatTask(it) }
     }
 
     override fun searchTask(id: Int): Task? {
@@ -82,19 +82,15 @@ class TaskManager: Manager<Task> {
     }
 
     override fun filterTask(isCompleted: Boolean): List<Task> {
-        // se eu entrar com true ou false,
         return taskList.filter { it.isCompleted == isCompleted }
     }
 }
 
-fun formatTask(task: List<Task>): List<String> {
-    val taskListDestructured = task.map { (id, title, description, isCompleted) ->
-        "Tarefa $id | " +
-                "Título: $title | " +
-//           "Descrição: ${ if (description!!.isEmpty()) "Sem descrição" else description }" +
-                "Status: ${if (isCompleted) "Concluída" else "Não concluída"}" }
-
-    return taskListDestructured
+fun formatTask(task: Task): String{
+    val taskDestructured =  "Tarefa ${task.id} | " +
+                            "Título: ${task.title} | " +
+                            "Status: ${if (task.isCompleted) "Concluída" else "Não concluída"}"
+    return taskDestructured
 }
 
 fun fillTask(): Task{
@@ -131,7 +127,6 @@ fun fillTask(): Task{
     return Task.create(title, description, isCompletedBoolean)
 }
 
-
 fun main(){
     val taskManager = TaskManager()
     var acao: Int? = null
@@ -142,8 +137,8 @@ fun main(){
             |1. Adicionar uma nova tarefa
             |2. Listar todas as tarefas
             |3. Buscar tarefa por ID
-            |4. Atualizar status - em andamento (aplicar melhorias)
-            |5. Excluir tarefa por ID - pendente
+            |4. Atualizar status 
+            |5. Excluir tarefa por ID
             |6. Filtrar tarefas concluídas ou pendentes
             |7. Sair"""
             .trimMargin())
@@ -174,13 +169,10 @@ fun main(){
                 val taskFound = taskManager.searchTask(id)
                 taskFound?.let {
                     println(
-                        "O produto buscado é: $it"
+                        "O produto buscado é: ${formatTask(it)}"
                     )
                 } ?: "Não há tarefas com este ID"
             }
-
-            // desenvolver melhorias:
-            // printar um antes e depois e não todas as tasks
 
             4 -> {
                 var id: Int? = null
@@ -195,11 +187,33 @@ fun main(){
 
                 val taskFound = taskManager.searchTask(id)
                 taskFound?.let {
+                    println("Antes: ${formatTask(taskFound)}")
                     taskManager.updateTask(taskFound)
-                    println("Tarefa atualizada com sucesso!")
-                    println(taskManager.listTask().joinToString(separator = "\n"))
+                    println(
+                        taskManager.searchTask(id)?.let {
+                            task -> "Tarefa atualizada com sucesso: ${formatTask(task)}"
+                        } ?: "Erro ao atualizar: Tarefa não encontrada"
+                    )
                 } ?: "Não há tarefa com este ID"
+            }
 
+            5 -> {
+                var id: Int? = null
+                println("Insira o ID da tarefa a ser excluida:")
+                print("-> ")
+                while (id == null || id < 0){
+                    id = readlnOrNull()?.toIntOrNull()
+                    if (id == null || id < 0 || taskManager.searchTask(id) == null) {
+                        println("O ID inserido é inválido. Tente novamente")
+                    }
+                }
+
+                val taskFound = taskManager.searchTask(id)
+                taskFound?.let {
+                    taskManager.deleteTask(id)
+                    println(taskManager.listTask().joinToString("\n")
+                        .ifEmpty { "Não há mais tarefas" })
+                }
             }
 
             6 -> {
@@ -220,9 +234,11 @@ fun main(){
                     }
                 }
                 val filteredTasks = taskManager.filterTask(isCompletedBoolean)
-                println(formatTask(filteredTasks).joinToString(separator = "\n").ifEmpty { "Nenhuma tarefa cadastrada" })
+                println(filteredTasks.joinToString(separator = "\n") { formatTask(it) }
+                    .ifEmpty { "Nenhuma tarefa com este status foi encontrada" })
             }
-            else -> "Teste"
+
+            else -> println("Opção inválida! Tente novamente.")
         }
     }
 }
